@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Stress Management</title>
+    <!-- Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> 
+    <!-- Fontawesome ICONS link -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Tilt+Neon&display=swap" rel="stylesheet">    
+    <link rel="stylesheet" href="{% static 'css/font.css' %}">
+    <link rel="stylesheet" href="{% static '/css/user-form.css' %}">
+    
+  </head>
+<body>
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+      </div>
+    <div class="full-container">
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags %}
+                <div class="alert alert-{{ message.tags }} d-flex justify-content-center align-items-center" role="alert">
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                    {{ message }}
+                </div>
+                {% else %}
+                <div class="alert alert-primary" role="alert">
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                    {{ message }}
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        <div class="form-container">
+            <h1>Stress Analysis Form</h1>
+        <form id="stress-analysis-form" action="{% url 'user-form' %}" method="post">
+            {% csrf_token %}
+            <!-- User Information Section -->
+            <h2>User Information</h2>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required><br><br>
+            
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" required><br><br>
+            
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" required><br><br>
+            
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select><br><br>
+
+            <label for="are-you">Are You:</label>
+            <select id="are-you" name="are-you" required>
+                <option value="student">Student</option>
+                <option value="work">Working</option>
+            </select><br><br>
+            <hr/>
+            <!-- Stress Analysis Section -->
+            <h2>Stress Analysis</h2>
+            <h3>Sleep Patterns and Quality</h3>
+            <label for="sleep-hours">How many hours of sleep do you get per night?</label>
+            <input type="number" id="sleep-hours" name="sleep-hours" required><br><br>
+            
+            <label for="sleep-quality">How would you rate the quality of your sleep?</label>
+            <select id="sleep-quality" name="sleep-quality" required>
+                <option value="poor">Poor</option>
+                <option value="fair">Fair</option>
+                <option value="good">Good</option>
+                <option value="excellent">Excellent</option>
+            </select><br><br>
+            <hr/>
+            <h3>Exercise and Physical Activity</h3>
+            <label for="exercise-frequency">How often do you exercise or engage in physical activity?</label>
+            <select id="exercise-frequency" name="exercise-frequency" required>
+                <option value="daily">Daily</option>
+                <option value="several-times-a-week">Several times a week</option>
+                <option value="about-once-a-week">About once a week</option>
+                <option value="None">None</option>
+            </select><br><br>
+            
+            <label for="exercise-duration">How long do you typically exercise or engage in physical activity?</label>
+            <input type="number" id="exercise-duration" name="exercise-duration" required> minutes<br><br>
+            <hr/>
+            <h3>Diet and Nutrition</h3>
+            <label for="diet-type">What type of diet do you follow?</label>
+            <select id="diet-type" name="diet-type" required onchange="handleDietChange()">
+                <option value="non-vegetarian">Non-Vegetarian</option>
+                <option value="vegetarian">Vegetarian</option>
+                <option value="vegan">Vegan</option>
+                <option value="other">Other (please specify)</option>
+            </select><br><br>
+            
+            <input type="text" id="diet-type-other" name="diet-type-other" disabled style="cursor: not-allowed;"><br><br>
+            <hr/>
+            <h3>Work or School Schedule and Workload</h3>
+            <label for="work-schedule">What is your typical work or school schedule?</label>
+            <select id="work-schedule" name="work-schedule" required>
+                <option value="full-time">Full-time</option>
+                <option value="part-time">Part-time</option>
+            </select><br><br>
+            
+            <label for="workload">How would you rate your workload?</label>
+            <select id="workload" name="workload" required>
+                <option value="light">Light</option>
+                <option value="moderate">Moderate</option>
+                <option value="heavy">Heavy</option>
+            </select><br><br>
+            <hr/>
+            <h3>Social Relationships and Support Networks</h3>
+            <label for="social-support">How would you rate your social support network?</label>
+            <select id="social-support" name="social-support" required>
+                <option value="strong">Strong</option>
+                <option value="moderate">Moderate</option>
+                <option value="weak">Weak</option>
+            </select><br><br>
+            <hr/>
+            <h3>Coping Mechanisms and Stress Management Techniques</h3>
+            <label for="coping-mechanisms">What coping mechanisms or stress management techniques do you use?</label>
+            <ul class="copying-mechanisms-list">
+                <li><input type="checkbox" id=" exercise" name="coping-mechanisms" value="exercise">Exercise</li>
+                <li><input type="checkbox" id="meditation" name="coping-mechanisms" value="meditation">Meditation</li>
+                <li><input type="checkbox" id="deep-breathing" name="coping-mechanisms" value="deep-breathing">Deep breathing</li>
+                <li><input type="checkbox" id="other-coping-mechanisms" name="coping-mechanisms" value="other-coping-mechanisms">Other (please specify)</li>
+            </ul>
+            <input type="text" id="other-coping-mechanisms-text" name="other-coping-mechanisms-text"><br><br>
+            <hr/>
+            <h3>Self-Reported Stress Levels and Emotional State</h3>
+            <label for="stress-level">How would you rate your current stress level?</label>
+            <select id="stress-level" name="stress-level" required>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select><br><br>
+            <hr/>
+            <label for="emotional-state">How would you describe your current emotional state?</label>
+            <select id="emotional-state" name="emotional-state" required onchange="handleEmotionalChange()">
+                <option value="calm">Calm</option>
+                <option value="anxious">Anxious</option>
+                <option value="overwhelmed">Overwhelmed</option>
+                <option value="other-emotional-state">Other (please specify)</option>
+            </select><br><br>
+            
+            <input type="text" id="other-emotional-state-text" name="other-emotional-state-text" disabled style="cursor: not-allowed;"><br><br>
+            
+            <button class="form-submit" type="submit">Submit</button>
+        </div>
+        <div class="result-container" id="result-container" style="display:none;">
+            <h1>Stress Management Results</h1>
+            <ul id="result-tips"></ul>
+        </div>
+    </div>
+    <script src="{% static '/js/form.js' %}"></script>
+</body>
+</html>
