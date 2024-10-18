@@ -44,10 +44,10 @@
             <!-- User Information Section -->
             <h2>User Information</h2>
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required><br><br>
+            <input type="text" id="name" name="name" value={{ name }} required><br><br>
             
             <label for="email">Email Address:</label>
-            <input type="email" id="email" name="email" required><br><br>
+            <input type="email" id="email" name="email" value={{ username }} required><br><br>
             
             <label for="age">Age:</label>
             <input type="number" id="age" name="age" required><br><br>
@@ -124,41 +124,28 @@
                 <option value="weak">Weak</option>
             </select><br><br>
             <hr/>
-            <h3>Coping Mechanisms and Stress Management Techniques</h3>
-            <label for="coping-mechanisms">What coping mechanisms or stress management techniques do you use?</label>
-            <ul class="copying-mechanisms-list">
-                <li><input type="checkbox" id=" exercise" name="coping-mechanisms" value="exercise">Exercise</li>
-                <li><input type="checkbox" id="meditation" name="coping-mechanisms" value="meditation">Meditation</li>
-                <li><input type="checkbox" id="deep-breathing" name="coping-mechanisms" value="deep-breathing">Deep breathing</li>
-                <li><input type="checkbox" id="other-coping-mechanisms" name="coping-mechanisms" value="other-coping-mechanisms">Other (please specify)</li>
-            </ul>
-            <input type="text" id="other-coping-mechanisms-text" name="other-coping-mechanisms-text"><br><br>
-            <hr/>
-            <h3>Self-Reported Stress Levels and Emotional State</h3>
+            <h3>Coping Mechanisms</h3>
+            <label for="coping-mechanisms">How would you rate your current coping mechanisms level?</label>
+            <input name="coping-mechanisms" id="coping-mechanisms" type="number" onchange="handleCopyLevel()"/>
+            <p class="copy-error-msg"></p><hr/>
+            <h3>Stress Levels</h3>
             <label for="stress-level">How would you rate your current stress level?</label>
-            <select id="stress-level" name="stress-level" required>
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-            </select><br><br>
+            <input name="stress-level" id="stress-level" type="number" onchange="handleStressLevel()"/><br><br>
+            <p class="stress-error-msg"></p>
             <hr/>
-            <label for="emotional-state">How would you describe your current emotional state?</label>
-            <select id="emotional-state" name="emotional-state" required onchange="handleEmotionalChange()">
-                <option value="calm">Calm</option>
-                <option value="anxious">Anxious</option>
-                <option value="overwhelmed">Overwhelmed</option>
-                <option value="other-emotional-state">Other (please specify)</option>
-            </select><br><br>
-            
-            <input type="text" id="other-emotional-state-text" name="other-emotional-state-text" disabled style="cursor: not-allowed;"><br><br>
-            
+            <label for="well-being">How would you rate your current well being?</label>
+            <input name="well-being" id="well-being" type="number" onchange="handleWellLevel()"/><br><br>
+            <p class="well-error-msg"></p>
+
             <button class="form-submit" type="submit">Submit</button>
         </div>
         <div class="result-container" id="result-container" style="display:none;">
             <h1>Stress Management Results</h1>
+            <div class="stress-level-percentage" id="stress-level-percentage"></div>
             <ul id="result-tips"></ul>
         </div>
     </div>
-    <script src="{% static '/js/form.js' %}"></script>
+    <script src="{% static '/form.js' %}"></script>
+    <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="a51e0bbe-f75a-4f27-8800-e67040416d06";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
 </body>
 </html>

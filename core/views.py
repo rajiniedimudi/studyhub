@@ -30,7 +30,10 @@ class Userform(View):
     template_name = "user-form.html"
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
+
+        user = User.objects.get(username=request.user)
+        context = {'name': user.first_name, "username": user.username}
+        return render(request, self.template_name, context=context)
     
     def post(self, request, *args, **kwargs):
         print(request.POST, 'req')
@@ -48,18 +51,11 @@ class Userform(View):
         work_schedule = request.POST.get('work-schedule')
         work_load = request.POST.get('workload')
         social_support = request.POST.get('social-support')
-        coping_mechanisms = request.POST.getlist('coping-mechanisms')
-        other_coping_mechanisms = request.POST.get('other-coping-mechanisms-text')
-        stress_level = request.POST.get('stress-level')
-        emotional_state = request.POST.get('emotional-state')
-        other_emotional_state = request.POST.get('other-emotional-state-text')
         
-        query = f'''Give tips with 5 points by analyzing my stress level. Please provide the following tips in a continuous format,
-                without breaks between the topic headings and their content. Am a {are} and {gender}. I sleep {sleep_hours} and sleep quality is {sleep_quality}.
+        query = f'''Give tips with only 5 points by analyzing my stress level. Please provide the following tips in a continuous format,
+                without breaks and dont use any special character in listing points. Am a {are} and {gender}. I sleep {sleep_hours} and sleep quality is {sleep_quality}.
                 I excerice {exercise_duration} in {exercise_frequency}. My diet is {diet_type} - {diet_type_other}.
-                I work {work_schedule} with {work_load}. My social support network is {social_support}. 
-                My coping mechanisms or stress management techniques is {coping_mechanisms}, any other coping mechanisms is {other_coping_mechanisms}.
-                My stress level is {stress_level} and emotional state is {emotional_state}, , any other emotional state is {other_emotional_state}.'''
+                I work {work_schedule} with {work_load}. My social support network is {social_support}.'''
 
         result = {"result": chatgpt(query)}
         print(result,'result')

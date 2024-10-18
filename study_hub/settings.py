@@ -138,4 +138,3 @@ EMAIL_HOST_PASSWORD = 'eset ritx wrfp jrjv'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # chatgpt API
-
